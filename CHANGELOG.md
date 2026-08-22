@@ -15,6 +15,10 @@ Notable changes to the `alacritty_terminal` crate are documented in its
 - Fixed `alacritty-escapes(7)` manpage missing from macOS install
 - Added the `Open Alacritty here` entry to the right-click context menu for folders on Windows
 
+### Added
+
+- Native macOS menu bar with New Window/New Tab, a Help menu, and window tiling shortcut support
+
 ### Fixed
 
 - Spurious "Failed to set new owner of XCB selection" warnings on X11

@@ -62,6 +62,7 @@ objc2 = "0.6.1"
 objc2-foundation = { version = "0.3.1", default-features = false, features = [
     "std",
     "NSString",
+    "NSURL",
     "NSLocale",
     "NSUserDefaults",
 ] }
@@ -71,6 +72,10 @@ objc2-app-kit = { version = "0.3.1", default-features = false, features = [
     "NSResponder",
     "NSView",
     "NSWindow",
+    "NSApplication",
+    "NSMenu",
+    "NSMenuItem",
+    "NSWorkspace",
 ] }
 
 [target.'cfg(windows)'.dependencies]

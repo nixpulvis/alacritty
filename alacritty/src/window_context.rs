@@ -115,6 +115,13 @@ impl WindowContext {
 
         let display = Display::new(window, gl_context, &config, false)?;
 
+        // Install the macOS application menu. `initial` runs once per process
+        // lifetime, so this happens exactly once.
+        #[cfg(target_os = "macos")]
+        if let Some(mtm) = objc2::MainThreadMarker::new() {
+            crate::macos::menu::initialize(mtm, proxy.clone());
+        }
+
         Self::new(display, config, options, proxy)
     }
 
@@ -496,6 +503,12 @@ impl WindowContext {
     /// ID of this terminal context.
     pub fn id(&self) -> WindowId {
         self.display.window.id()
+    }
+
+    /// Whether this window's terminal currently holds focus.
+    #[cfg(target_os = "macos")]
+    pub fn focused(&self) -> bool {
+        self.terminal.lock().is_focused
     }
 
     /// Write the ref test results to the disk.

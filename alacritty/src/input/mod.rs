@@ -161,7 +161,7 @@ impl Action {
     }
 }
 
-trait Execute<T: EventListener> {
+pub(crate) trait Execute<T: EventListener> {
     fn execute<A: ActionContext<T>>(&self, ctx: &mut A);
 }
 

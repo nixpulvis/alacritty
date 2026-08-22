@@ -49,6 +49,8 @@ use crate::cli::{IpcConfig, ParsedOptions};
 use crate::cli::{Options as CliOptions, WindowOptions};
 use crate::clipboard::Clipboard;
 use crate::config::ui_config::{HintAction, HintInternalAction};
+#[cfg(target_os = "macos")]
+use crate::config::Action;
 use crate::config::{self, UiConfig};
 #[cfg(not(windows))]
 use crate::daemon::foreground_process_path;
@@ -57,6 +59,8 @@ use crate::display::color::Rgb;
 use crate::display::hint::HintMatch;
 use crate::display::window::{ImeInhibitor, Window};
 use crate::display::{Display, Preedit, SizeInfo};
+#[cfg(target_os = "macos")]
+use crate::input::Execute;
 use crate::input::{self, ActionContext as _, FONT_SIZE_STEP};
 use crate::logging::{LOG_TARGET_CONFIG, LOG_TARGET_WINIT};
 use crate::message_bar::{Message, MessageBuffer};
@@ -392,6 +396,33 @@ impl ApplicationHandler<Event> for Processor {
             // Shutdown all windows.
             #[cfg(unix)]
             (EventType::Shutdown, _) => event_loop.exit(),
+            // Run the menu New Window / New Tab action in the focused window so
+            // it inherits that window's context. When no window is focused (e.g.
+            // all minimized, or focus on the menu bar), fall back to opening a
+            // window with default options.
+            #[cfg(target_os = "macos")]
+            (payload @ EventType::CreateWindowFromMenu { .. }, None) => {
+                let focused =
+                    self.windows.iter().find_map(|(id, ctx)| ctx.focused().then_some(*id));
+                match focused {
+                    Some(window_id) => {
+                        if let Some(window_context) = self.windows.get_mut(&window_id) {
+                            window_context.handle_event(
+                                event_loop,
+                                &self.proxy,
+                                &mut self.clipboard,
+                                &mut self.scheduler,
+                                WinitEvent::UserEvent(Event::new(payload, window_id)),
+                            );
+                        }
+                    },
+                    None => {
+                        let options = WindowOptions::default();
+                        let event = Event::new(EventType::CreateWindow(options), None);
+                        let _ = self.proxy.send_event(event);
+                    },
+                }
+            },
             // Process events affecting all windows.
             (payload, None) => {
                 let event = WinitEvent::UserEvent(Event::new(payload, None));
@@ -546,6 +577,11 @@ pub enum EventType {
     Message(Message),
     Scroll(Scroll),
     CreateWindow(WindowOptions),
+    // TODO: Is this self-contained event the right shape, or should we refactor
+    // `create_new_window` so the CWD + tab-group handling lives in one place that
+    // both the key bindings and the menu drive through?
+    #[cfg(target_os = "macos")]
+    CreateWindowFromMenu { tabbed: bool },
     #[cfg(unix)]
     IpcConfig(IpcConfig),
     #[cfg(unix)]
@@ -1934,6 +1970,14 @@ impl input::Processor<EventProxy, ActionContext<'_, Notifier, EventProxy>> {
                 | EventType::ConfigReload(_)
                 | EventType::CreateWindow(_)
                 | EventType::Frame => (),
+                #[cfg(target_os = "macos")]
+                EventType::CreateWindowFromMenu { tabbed } => {
+                    // The Processor already routed this to the focused window, so run
+                    // the same action as the Cmd+N / Cmd+T key bindings unconditionally.
+                    let action =
+                        if tabbed { Action::CreateNewTab } else { Action::CreateNewWindow };
+                    action.execute(&mut self.ctx);
+                },
             },
             WinitEvent::WindowEvent { event, .. } => {
                 match event {
