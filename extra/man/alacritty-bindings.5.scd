@@ -502,34 +502,10 @@ configuration. See *alacritty*(5) for full configuration format documentation.
 :  _"Command"_
 :  _"Vi|~Search"_
 :  _"ClearSelection"_
-|  _"H"_
-:  _"Command"_
-:[
-:  _"Hide"_
-|  _"H"_
-:  _"Command|Alt"_
-:[
-:  _"HideOtherApplications"_
-|  _"M"_
-:  _"Command"_
-:[
-:  _"Minimize"_
-|  _"Q"_
-:  _"Command"_
-:[
-:  _"Quit"_
 |  _"W"_
 :  _"Command"_
 :[
 :  _"Quit"_
-|  _"N"_
-:  _"Command"_
-:[
-:  _"CreateNewWindow"_
-|  _"T"_
-:  _"Command"_
-:[
-:  _"CreateNewTab"_
 |  _"F"_
 :  _"Command|Control"_
 :[
@@ -542,22 +518,6 @@ configuration. See *alacritty*(5) for full configuration format documentation.
 :  _"Command"_
 :  _"~Search"_
 :  _"SearchBackward"_
-|  _"]"_
-:  _"Command|Shift"_
-:[
-:  _"SelectNextTab"_
-|  _"["_
-:  _"Command|Shift"_
-:[
-:  _"SelectPreviousTab"_
-|  _"Tab"_
-:  _"Command"_
-:[
-:  _"SelectNextTab"_
-|  _"Tab"_
-:  _"Command|Shift"_
-:[
-:  _"SelectPreviousTab"_
 |  _"1"_
 :  _"Command"_
 :[

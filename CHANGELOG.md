@@ -25,6 +25,10 @@ Notable changes to the `alacritty_terminal` crate are documented in its
 - Lacking permissions to launch software sending Apple events
 - Off-by-one in vi mode ParagraphUp action
 
+### Removed
+
+- macOS default key bindings that duplicated native menu-bar items (New Window, New Tab, Minimize, Hide, Hide Others, Quit, and Show Next/Previous Tab), which now follow the menu bar and the user's macOS shortcuts
+
 ## 0.17.0
 
 ### Packaging

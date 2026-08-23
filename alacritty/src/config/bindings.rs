@@ -582,11 +582,6 @@ pub fn platform_key_bindings() -> Vec<KeyBinding> {
         KeyBinding;
         Insert, ModifiersState::SHIFT, ~BindingMode::VI, ~BindingMode::SEARCH; Action::Esc("\x1b[2;2~".into());
         // Tabbing api.
-        "t",    ModifiersState::SUPER;                                         Action::CreateNewTab;
-        "]",    ModifiersState::SUPER | ModifiersState::SHIFT;                 Action::SelectNextTab;
-        "[",    ModifiersState::SUPER | ModifiersState::SHIFT;                 Action::SelectPreviousTab;
-        Tab,    ModifiersState::SUPER;                                         Action::SelectNextTab;
-        Tab,    ModifiersState::SUPER | ModifiersState::SHIFT;                 Action::SelectPreviousTab;
         "1",    ModifiersState::SUPER;                                         Action::SelectTab1;
         "2",    ModifiersState::SUPER;                                         Action::SelectTab2;
         "3",    ModifiersState::SUPER;                                         Action::SelectTab3;
@@ -604,14 +599,9 @@ pub fn platform_key_bindings() -> Vec<KeyBinding> {
         "k",    ModifiersState::SUPER, ~BindingMode::VI, ~BindingMode::SEARCH; Action::ClearHistory;
         "v",    ModifiersState::SUPER, ~BindingMode::VI;                       Action::Paste;
         "v",    ModifiersState::SUPER, +BindingMode::VI, +BindingMode::SEARCH; Action::Paste;
-        "n",    ModifiersState::SUPER;                                         Action::CreateNewWindow;
         "f",    ModifiersState::CONTROL | ModifiersState::SUPER;               Action::ToggleFullscreen;
         "c",    ModifiersState::SUPER;                                         Action::Copy;
         "c",    ModifiersState::SUPER, +BindingMode::VI, ~BindingMode::SEARCH; Action::ClearSelection;
-        "h",    ModifiersState::SUPER;                                         Action::Hide;
-        "h",    ModifiersState::SUPER   | ModifiersState::ALT;                 Action::HideOtherApplications;
-        "m",    ModifiersState::SUPER;                                         Action::Minimize;
-        "q",    ModifiersState::SUPER;                                         Action::Quit;
         "w",    ModifiersState::SUPER;                                         Action::Quit;
         "f",    ModifiersState::SUPER, ~BindingMode::SEARCH;                   Action::SearchForward;
         "b",    ModifiersState::SUPER, ~BindingMode::SEARCH;                   Action::SearchBackward;
