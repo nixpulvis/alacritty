@@ -502,14 +502,6 @@ configuration. See *alacritty*(5) for full configuration format documentation.
 :  _"Command"_
 :  _"Vi|~Search"_
 :  _"ClearSelection"_
-|  _"W"_
-:  _"Command"_
-:[
-:  _"Quit"_
-|  _"F"_
-:  _"Command|Control"_
-:[
-:  _"ToggleFullscreen"_
 |  _"F"_
 :  _"Command"_
 :  _"~Search"_

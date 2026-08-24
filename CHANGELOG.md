@@ -18,6 +18,11 @@ Notable changes to the `alacritty_terminal` crate are documented in its
 ### Added
 
 - Native macOS menu bar with New Window/New Tab, a Help menu, and window tiling shortcut support
+- macOS Close (Cmd+W) and Enter Full Screen (Ctrl+Cmd+F) menu items
+
+### Changed
+
+- On macOS, Alacritty keeps running after its last window closes. Quit with Cmd+Q
 
 ### Fixed
 
@@ -28,6 +33,7 @@ Notable changes to the `alacritty_terminal` crate are documented in its
 ### Removed
 
 - macOS default key bindings that duplicated native menu-bar items (New Window, New Tab, Minimize, Hide, Hide Others, Quit, and Show Next/Previous Tab), which now follow the menu bar and the user's macOS shortcuts
+- macOS Cmd+W (previously Quit) and Ctrl+Cmd+F default key bindings, now provided by the Close and Enter Full Screen menu items
 
 ## 0.17.0
 

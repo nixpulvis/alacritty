@@ -1,7 +1,7 @@
 use objc2::rc::Retained;
 use objc2::runtime::{AnyObject, NSObject, NSObjectProtocol, Sel};
 use objc2::{DefinedClass, MainThreadMarker, MainThreadOnly, define_class, msg_send, sel};
-use objc2_app_kit::{NSApplication, NSMenu, NSMenuItem, NSWorkspace};
+use objc2_app_kit::{NSApplication, NSEventModifierFlags, NSMenu, NSMenuItem, NSWorkspace};
 use objc2_foundation::{NSString, NSURL, ns_string};
 use winit::event_loop::EventLoopProxy;
 
@@ -79,6 +79,15 @@ pub fn initialize(mtm: MainThreadMarker, proxy: EventLoopProxy<Event>) {
     ] {
         file_menu.addItem(&action_item(mtm, title, action, key, Some(target_obj)));
     }
+
+    // Close the key window (Cmd+W), routed through the responder chain.
+    file_menu.addItem(&action_item(
+        mtm,
+        ns_string!("Close"),
+        sel!(performClose:),
+        ns_string!("w"),
+        None,
+    ));
     main_menu.addItem(&submenu_item(mtm, ns_string!("File"), &file_menu));
 
     // Window menu: standard AppKit actions on the key window (no target).
@@ -89,6 +98,19 @@ pub fn initialize(mtm: MainThreadMarker, proxy: EventLoopProxy<Event>) {
     ] {
         window_menu.addItem(&action_item(mtm, title, action, key, None));
     }
+
+    // Enter Full Screen (Ctrl+Cmd+F). AppKit toggles the title to "Exit Full
+    // Screen" automatically.
+    let fullscreen = action_item(
+        mtm,
+        ns_string!("Enter Full Screen"),
+        sel!(toggleFullScreen:),
+        ns_string!("f"),
+        None,
+    );
+    let mask = NSEventModifierFlags::Control | NSEventModifierFlags::Command;
+    fullscreen.setKeyEquivalentModifierMask(mask);
+    window_menu.addItem(&fullscreen);
     main_menu.addItem(&submenu_item(mtm, ns_string!("Window"), &window_menu));
 
     // Auto-populate the system window commands and tiling entries.

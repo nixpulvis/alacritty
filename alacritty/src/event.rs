@@ -467,6 +467,11 @@ impl ApplicationHandler<Event> for Processor {
                         window_context.write_ref_test_results();
                     }
 
+                    // macOS keeps the application running after its last window
+                    // closes, matching platform conventions. Quit it from the App
+                    // menu (Cmd+Q) or reopen a window with Cmd+N. Other platforms
+                    // exit with the final window.
+                    #[cfg(not(target_os = "macos"))]
                     event_loop.exit();
                 }
             },
