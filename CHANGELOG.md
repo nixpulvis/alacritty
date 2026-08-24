@@ -17,8 +17,7 @@ Notable changes to the `alacritty_terminal` crate are documented in its
 
 ### Added
 
-- Native macOS menu bar with New Window/New Tab, a Help menu, and window tiling shortcut support
-- macOS Close (Cmd+W) and Enter Full Screen (Ctrl+Cmd+F) menu items
+- Native macOS menu bar with basic File, Window, and Help menus
 
 ### Changed
 
