@@ -199,6 +199,10 @@ fn alacritty(mut options: Options) -> Result<(), Box<dyn Error>> {
     #[cfg(target_os = "macos")]
     macos::disable_autofill();
 
+    // Remove sockets of old instances which did not clean up after themselves.
+    #[cfg(unix)]
+    ipc::remove_dead_sockets();
+
     // Spawn the Unix I/O event polling thread.
     #[cfg(unix)]
     let socket_path = match IoListener::spawn(&config, &options, window_event_loop.create_proxy()) {
